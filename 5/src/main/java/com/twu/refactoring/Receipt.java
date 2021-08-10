@@ -17,7 +17,7 @@ public class Receipt {
         this.taxi = taxi;
     }
 
-    public double getTotalCost() {
+    public double getAirconditionedPreCost() {
         double totalCost = 0;
 
         // fixed charges
@@ -26,14 +26,29 @@ public class Receipt {
         // taxi charges
         int totalKms = taxi.getTotalKms();
         double peakTimeMultiple = taxi.isPeakTime() ? PEAK_TIME_MULTIPLIER : OFF_PEAK_MULTIPLIER;
-        if(taxi.isAirConditioned()) {
-            totalCost += Math.min(RATE_CHANGE_DISTANCE, totalKms) * PRE_RATE_CHANGE_AC_RATE * peakTimeMultiple;
-            totalCost += Math.max(0, totalKms - RATE_CHANGE_DISTANCE) * POST_RATE_CHANGE_AC_RATE * peakTimeMultiple;
-        } else {
-            totalCost += Math.min(RATE_CHANGE_DISTANCE, totalKms) * PRE_RATE_CHANGE_NON_AC_RATE * peakTimeMultiple;
-            totalCost += Math.max(0, totalKms - RATE_CHANGE_DISTANCE) * POST_RATE_CHANGE_NON_AC_RATE * peakTimeMultiple;
-        }
+
+        taxi.isAirConditioned() == true? totalCost = getTotalCost(totalCost, totalKms, peakTimeMultiple, PRE_RATE_CHANGE_AC_RATE, POST_RATE_CHANGE_AC_RATE)
+                : totalCost = getTotalCost(totalCost, totalKms, peakTimeMultiple, PRE_RATE_CHANGE_NON_AC_RATE, POST_RATE_CHANGE_NON_AC_RATE);
+
+
+//        if(taxi.isAirConditioned()) {
+            totalCost = getTotalCost(totalCost, totalKms, peakTimeMultiple, PRE_RATE_CHANGE_AC_RATE, POST_RATE_CHANGE_AC_RATE);
+//        } else {
+//            totalCost = getTotalCost(totalCost, totalKms, peakTimeMultiple, PRE_RATE_CHANGE_NON_AC_RATE, POST_RATE_CHANGE_NON_AC_RATE);
+//        }
 
         return totalCost * (1 + SALES_TAX_RATE);
     }
+
+    private double getTotalCost(double totalCost, int totalKms, double peakTimeMultiple, int preRateChangeAcRate, int postRateChangeAcRate) {
+        totalCost = getCost(totalCost, peakTimeMultiple, Math.min(RATE_CHANGE_DISTANCE, totalKms), preRateChangeAcRate);
+        totalCost = getCost(totalCost, peakTimeMultiple, Math.max(0, totalKms - RATE_CHANGE_DISTANCE), postRateChangeAcRate);
+        return totalCost;
+    }
+
+    private double getCost(double totalCost, double peakTimeMultiple, int max, double postRateChangeAcRate) {
+        totalCost += max * postRateChangeAcRate * peakTimeMultiple;
+        return totalCost;
+    }
+
 }

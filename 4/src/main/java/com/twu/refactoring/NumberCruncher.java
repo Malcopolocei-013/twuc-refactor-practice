@@ -12,27 +12,22 @@ public class NumberCruncher {
         this.numbers = numbers;
     }
 
+    public int countEvenOrOdd(int event) {
+        return (int)Arrays.stream(numbers).filter(number -> number % 2 == event).count();
+    }
+
     public int countEven() {
-        return (int)Arrays.stream(numbers).filter(number -> number % 2 == EVEN).count();
+        return countEvenOrOdd(EVEN);
     }
 
     public int countOdd() {
-        return (int)Arrays.stream(numbers).filter(number -> number % 2 == ODD).count();
+        return countEvenOrOdd(ODD);
     }
 
     public int countPositive() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number >= 0) count++;
-        }
-        return count;
+        return (int) Arrays.stream(numbers).filter(number -> number >= 0).count();
     }
-
     public int countNegative() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number < 0) count++;
-        }
-        return count;
+        return (int) Arrays.stream(numbers).filter(number -> number < 0).count();
     }
 }

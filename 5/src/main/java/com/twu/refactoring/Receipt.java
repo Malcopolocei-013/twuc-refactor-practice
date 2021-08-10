@@ -20,18 +20,14 @@ public class Receipt {
     public double getAirconditionedPreCost() {
         double totalCost = 0;
 
-        // fixed charges
         totalCost += FIXED_CHARGE;
-
-        // taxi charges
         int totalKms = taxi.getTotalKms();
 
-        if(taxi.isAirConditioned()) {
-            totalCost = getTotalCost(totalCost, totalKms, PRE_RATE_CHANGE_AC_RATE, POST_RATE_CHANGE_AC_RATE);
-        } else {
-            totalCost = getTotalCost(totalCost, totalKms, PRE_RATE_CHANGE_NON_AC_RATE, POST_RATE_CHANGE_NON_AC_RATE);
-        }
+        int PRE_RATE_CHANGE = taxi.isAirConditioned()? PRE_RATE_CHANGE_AC_RATE: PRE_RATE_CHANGE_NON_AC_RATE;
+        int POST_RATE_CHANGE = taxi.isAirConditioned()? POST_RATE_CHANGE_AC_RATE: POST_RATE_CHANGE_NON_AC_RATE;
+        totalCost = getTotalCost(totalCost, totalKms, PRE_RATE_CHANGE, POST_RATE_CHANGE);
 
+        /*计算价格 = 里程数 * 计价率（分前后） * 是否黄金时间段*/
         return totalCost * (1 + SALES_TAX_RATE);
     }
 

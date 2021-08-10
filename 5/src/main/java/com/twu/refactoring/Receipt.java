@@ -22,25 +22,15 @@ public class Receipt {
 
         totalCost += FIXED_CHARGE;
         int totalKms = taxi.getTotalKms();
-
+        double peakTimeMultiple = taxi.isPeakTime() ? PEAK_TIME_MULTIPLIER : OFF_PEAK_MULTIPLIER;
         int PRE_RATE_CHANGE = taxi.isAirConditioned()? PRE_RATE_CHANGE_AC_RATE: PRE_RATE_CHANGE_NON_AC_RATE;
         int POST_RATE_CHANGE = taxi.isAirConditioned()? POST_RATE_CHANGE_AC_RATE: POST_RATE_CHANGE_NON_AC_RATE;
-        totalCost = getTotalCost(totalCost, totalKms, PRE_RATE_CHANGE, POST_RATE_CHANGE);
 
         /*计算价格 = 里程数 * 计价率（分前后） * 是否黄金时间段*/
+        totalCost += Math.min(RATE_CHANGE_DISTANCE, totalKms) * PRE_RATE_CHANGE * peakTimeMultiple;
+        totalCost += Math.max(totalKms - RATE_CHANGE_DISTANCE, 0) * POST_RATE_CHANGE * peakTimeMultiple;
         return totalCost * (1 + SALES_TAX_RATE);
     }
 
-    private double getTotalCost(double totalCost, int totalKms, int preRateChangeAcRate, int postRateChangeAcRate) {
-        double peakTimeMultiple = taxi.isPeakTime() ? PEAK_TIME_MULTIPLIER : OFF_PEAK_MULTIPLIER;
-        totalCost = getCostCalculate(totalCost, peakTimeMultiple, Math.min(RATE_CHANGE_DISTANCE, totalKms), preRateChangeAcRate);
-        totalCost = getCostCalculate(totalCost, peakTimeMultiple, Math.max(0, totalKms - RATE_CHANGE_DISTANCE), postRateChangeAcRate);
-        return totalCost;
-    }
-
-    private double getCostCalculate(double totalCost, double peakTimeMultiple, int max, double postRateChangeAcRate) {
-        totalCost += max * postRateChangeAcRate * peakTimeMultiple;
-        return totalCost;
-    }
 
 }

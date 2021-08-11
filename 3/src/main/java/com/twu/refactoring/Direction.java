@@ -9,52 +9,18 @@ public class Direction {
 
     public Direction turnRight() {
         return new Direction(DIRECTIONS.charAt((DIRECTIONS.indexOf(direction) + 3) % 4));
-//            case 'N':
-//                return new Direction('E');
-//            case 'S':
-//                return new Direction('W');
-//            case 'E':
-//                return new Direction('N');
-//            case 'W':
-//                return new Direction('S');
-//            default:
-//                throw new IllegalArgumentException();
     }
 
     public Direction turnLeft() {
-        switch (direction) {
-            case 'N':
-                return new Direction('W');
-            case 'S':
-                return new Direction('E');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
-        }
+        return new Direction(DIRECTIONS.charAt((DIRECTIONS.indexOf(direction) + 1) % 4));
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object obj) {
+        Direction directionObj = (Direction) obj;
 
-        Direction direction1 = (Direction) o;
-
-        if (direction != direction1.direction) return false;
+        if (direction != directionObj.direction || obj == null || getClass() != obj.getClass()) return false;
 
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) direction;
-    }
-
-    @Override
-    public String toString() {
-        return "Direction{direction=" + direction + '}';
     }
 }

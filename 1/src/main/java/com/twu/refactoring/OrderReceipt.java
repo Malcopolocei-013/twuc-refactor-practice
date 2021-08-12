@@ -21,15 +21,18 @@ public class OrderReceipt {
 		double totalFee;
 		StringBuilder output = new StringBuilder();
 
-		/*计算总的税率，和总的费用*/
 		totalFee = order.getLineItems().stream().mapToDouble(LineItem::getTotalAmount).sum();
 		totalSalesTax = totalFee * TAX_RATE;
 
 		totalFee += totalSalesTax;
+		printer(totalSalesTax, totalFee, output);
+		return output.toString();
+	}
+
+	private void printer(double totalSalesTax, double totalFee, StringBuilder output) {
 		output.append(PRINTING_HEADERS + "\n").append(order.toString());
 		order.toString();
 		output.append(SALES_TAX).append('\t').append(totalSalesTax);
 		output.append(TOTAL_AMOUNT).append('\t').append(totalFee);
-		return output.toString();
 	}
 }
